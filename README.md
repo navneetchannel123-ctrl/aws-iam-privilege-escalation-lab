@@ -16,23 +16,29 @@ This project simulates a real-world AWS cloud security breach initiated by a mis
 ### 1. Privilege Escalation
 **Objective:** Exploit `iam:CreateUser` and `iam:AttachUserPolicy` to establish a rogue administrative backdoor.
 
-**Step A: The Exploit (CLI)**
-Using the compromised `proj2-attacker` credentials, I executed the following commands to create a new user and bypass intended restrictions:
+Using the compromised `proj2-attacker` credentials, I bypassed intended restrictions by creating a secondary administrative identity, `hacked-admin`.
 
+<details>
+<summary><b>[Click to view proof of privilege escalation]</b></summary>
+<br>
+
+**Step A: The Exploit (CLI)**
 ![CLI Proof](screenshots/13_hacked_admin_user_created.png)
 *Figure 13: Terminal output showing the successful creation of 'hacked-admin' via AWS CLI.*
 
 **Step B: Verification (Console)**
-The screenshot below confirms that the rogue user was successfully injected into the IAM environment with full privileges:
-
 ![Console Proof](screenshots/18_hacked_admin_user.png)
-*Figure 18: AWS Management Console view confirming the existence of the unauthorized 'hacked-admin' identity.*
+*Figure 18: AWS Management Console confirming the existence of the unauthorized 'hacked-admin' identity.*
 
-![Weak Policy](screenshots/02_attach_weak_policy.png)
-*Figure 2: The toxic IAM policy allowing privilege escalation.*
+**The Root Cause: Toxic Policy**
+![Toxic Policy](screenshots/02_attach_weak_policy.png)
+*Figure 02: The misconfigured IAM policy that allowed the 'proj2-attacker' to escalate privileges.*
 </details>
 
 **Impact:** Complete account takeover achieved via a newly minted admin identity.
+
+---
+
 ### 2. Data Exfiltration
 **Objective:** Locate and extract sensitive data using the rogue admin keys.
 
