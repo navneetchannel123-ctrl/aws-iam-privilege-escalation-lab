@@ -40,28 +40,24 @@ Using the compromised `proj2-attacker` credentials, I bypassed intended restrict
 ---
 
 ### 2. Data Exfiltration
-**Objective:** Locate and extract sensitive data using the rogue admin keys.
+**Objective:** Access and download sensitive credentials from a restricted S3 bucket using the `hacked-admin` backdoor.
 
-With admin access secured, I scanned the environment for vulnerable storage and located the `proj2-data-leak` bucket, downloading its contents.
-```bash
-aws s3 ls s3://proj2-data-leak
-aws s3 cp s3://proj2-data-leak/passwords.txt .
-```
+Targeting the `proj2-data-leak` bucket, I used the AWS CLI to bypass intended security boundaries and retrieve the sensitive `passwords.txt` file.
 
 <details>
-<summary><b>[Click to view proof of exfiltration]</b></summary>
+<summary><b>[Click to view definitive proof of exfiltration]</b></summary>
 <br>
 
-![S3 Bucket Exposure](screenshots/04_s3_bucket_overview.png)
-*Figure 3: Identifying the exposed S3 bucket containing sensitive files.*
+**Step A: Identifying the Target**
+![S3 Overview](screenshots/04_s3_bucket_overview.png)
+*Figure 04: Locating the sensitive data-leak bucket in the S3 console.*
 
-![Data Retrieved](screenshots/16_s3_data_retrieved.png)
-*Figure 4: Successful exfiltration of the passwords.txt payload via AWS CLI.*
+**Step B: The Breach (Terminal)**
+![Data Retrieval](screenshots/16_s3_data_retrieved.png)
+*Figure 16: Terminal output confirming the successful sync and unauthorized viewing of 'passwords.txt'.*
 </details>
 
-**Impact:** Sensitive internal files successfully exfiltrated to the local attack machine.
-
----
+**Impact:** **CRITICAL.** Unauthorized access to plaintext credentials, leading to potential lateral movement across the infrastructure.
 
 ## Detection & Alerting (Defense)
 
