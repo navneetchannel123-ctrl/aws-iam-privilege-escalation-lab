@@ -59,9 +59,9 @@ Targeting the `proj2-data-leak` bucket, I used the AWS CLI to bypass intended se
 
 **Impact:** **CRITICAL.** Unauthorized access to plaintext credentials, leading to potential lateral movement across the infrastructure.
 
-## Detection & Alerting (Defense)
+## 3. Detection & Alerting (Defense)
 
-### 1. Intercepting Anomalies
+### Intercepting Anomalies
 **Objective:** Detect unauthorized identity creation using CloudWatch Metric Filters.
 
 AWS CloudTrail logged the malicious `CreateUser` API call, which was intercepted by a pre-configured CloudWatch Metric Filter scanning for identity-based anomalies.
@@ -73,7 +73,7 @@ AWS CloudTrail logged the malicious `CreateUser` API call, which was intercepted
 ![Metric Filter](screenshots/08_metric_filter_created.png)
 *Figure 5: CloudWatch filter intercepting unauthorized user creation (`{ $.eventName = "CreateUser" }`).*
 </details>
-### 2. Real-Time Alerting
+### Real-Time Alerting
 **Objective:** Notify the security team instantly via Amazon SNS.
 
 The Metric Filter triggered a CloudWatch Alarm, which immediately dispatched an incident notification via email.
@@ -91,32 +91,28 @@ The Metric Filter triggered a CloudWatch Alarm, which immediately dispatched an 
 
 ---
 
-## Incident Response & Remediation
+### 4. Incident Response & Remediation
 **Objective:** Contain the threat and eradicate the compromised assets.
 
-Upon receiving the SNS alert, immediate containment and eradication protocols were executed via the AWS CLI to neutralize the threat.
-
-```bash
-# 1. Neutralize the compromised identity
-aws iam delete-access-key --user-name hacked-admin --access-key-id <ACCESS_KEY_ID>
-aws iam detach-user-policy --user-name hacked-admin --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
-aws iam delete-user --user-name hacked-admin
-
-# 2. Secure the data perimeter
-aws s3api put-public-access-block --bucket proj2-data-leak --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
-```
+Upon receiving the real-time SNS alert, I initiated emergency containment protocols via the **AWS Management Console** to neutralize the threat and secure the cloud environment.
 
 <details>
-<summary><b>[Click to view remediation proof]</b></summary>
+<summary><b>[Click to view remediation & hardening proof]</b></summary>
 <br>
 
-![S3 Block Public Access](screenshots/22_blocked_public_access.png)
-*Figure 8: Securing the data perimeter by forcefully blocking public S3 access at the bucket level.*
+**Step A: Severing Rogue Access**
+I manually revoked the compromised access keys and deleted the `hacked-admin` identity to prevent further unauthorized sessions.
+
+**Step B: Hardening the Data Perimeter**
+![S3 Public Block](screenshots/22_blocked_public_access.png)
+*Figure 22: Enforcing 'Block Public Access' via the S3 Console to permanently close the exfiltration vector.*
+
+**Step C: Policy Cleanup**
+![Policy Removed](screenshots/23_removed_bucket_policy.png)
+*Figure 23: Removing the misconfigured public bucket policy to restore a secure baseline.*
 </details>
 
-**Impact:** Rogue access completely severed and data exfiltration vectors neutralized.
-
----
+**Impact:** Rogue access was completely severed, and the data perimeter was hardened, preventing future unauthorized public access.
 
 ## Tech Stack & Services Used
 * **Identity & Security:** AWS IAM, AWS STS
