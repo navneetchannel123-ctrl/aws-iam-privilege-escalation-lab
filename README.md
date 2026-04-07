@@ -92,27 +92,32 @@ The Metric Filter triggered a CloudWatch Alarm, which immediately dispatched an 
 ---
 
 ### 4. Incident Response & Remediation
-**Objective:** Contain the threat and eradicate the compromised assets.
+**Objective:** Contain the threat, eradicate compromised assets, and restore secure access.
 
-Upon receiving the real-time SNS alert, I initiated emergency containment protocols via the **AWS Management Console** to neutralize the threat and secure the cloud environment.
+Upon receiving the real-time SNS alert, I initiated emergency containment protocols via the **AWS Management Console** to neutralize the threat and restore a secure baseline.
 
 <details>
-<summary><b>[Click to view remediation & hardening proof]</b></summary>
+<summary><b>[Click to view full remediation & hardening proof]</b></summary>
 <br>
 
-**Step A: Severing Rogue Access**
-I manually revoked the compromised access keys and deleted the `hacked-admin` identity to prevent further unauthorized sessions.
+**Step A: Severing Rogue Identity Access**
+I manually revoked the compromised access keys and deleted the `hacked-admin` identity to ensure the attacker could not maintain persistence.
+![Key Removal](screenshots/19_hacked_admin_key_removal.png)
+*Figure 19: Revoking the active Access Keys for the rogue user.*
+![User Deleted](screenshots/20_hacked_admin_removed.png)
+*Figure 20: Deleting the 'hacked-admin' IAM user from the console.*
 
 **Step B: Hardening the Data Perimeter**
 ![S3 Public Block](screenshots/22_blocked_public_access.png)
 *Figure 22: Enforcing 'Block Public Access' via the S3 Console to permanently close the exfiltration vector.*
 
-**Step C: Policy Cleanup**
-![Policy Removed](screenshots/23_removed_bucket_policy.png)
-*Figure 23: Removing the misconfigured public bucket policy to restore a secure baseline.*
+**Step C: Restoring Secure Access (Least Privilege)**
+Finally, I restored access to the bucket using a **ReadOnly** policy, ensuring that legitimate users could access data without the risk of unauthorized modification or public exposure.
+![S3 ReadOnly](screenshots/21_s3_read_only_access.png)
+*Figure 21: Re-configuring the bucket with S3ReadOnlyAccess to follow the principle of Least Privilege.*
 </details>
 
-**Impact:** Rogue access was completely severed, and the data perimeter was hardened, preventing future unauthorized public access.
+**Impact:** **Threat Neutralized.** Rogue identities were purged, and the S3 data perimeter was hardened and restored to a secure, "Read-Only" baseline.
 
 ## Tech Stack & Services Used
 * **Identity & Security:** AWS IAM, AWS STS
