@@ -28,9 +28,6 @@ The screenshot below confirms that the rogue user was successfully injected into
 ![Console Proof](screenshots/18_hacked_admin_user.png)
 *Figure 18: AWS Management Console view confirming the existence of the unauthorized 'hacked-admin' identity.*
 
-![IAM User Creation](screenshots/01_iam_user_creation.png)
-*Figure 1: The rogue 'hacked-admin' user is successfully created.*
-
 ![Weak Policy](screenshots/02_attach_weak_policy.png)
 *Figure 2: The toxic IAM policy allowing privilege escalation.*
 </details>
