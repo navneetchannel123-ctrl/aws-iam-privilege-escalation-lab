@@ -14,17 +14,19 @@ This project simulates a real-world AWS cloud security breach initiated by a mis
 ## The Attack Lifecycle (Offense)
 
 ### 1. Privilege Escalation
-**Objective:** Exploit overly permissive IAM rights on a compromised user (`proj2-attacker`) to create a rogue admin account.
+**Objective:** Exploit `iam:CreateUser` and `iam:AttachUserPolicy` to establish a rogue administrative backdoor.
 
-I executed the `create-user` and `attach-user-policy` commands to establish a backdoor account with full Administrator access.
-```bash
-aws iam create-user --user-name hacked-admin
-aws iam attach-user-policy --user-name hacked-admin --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
-```
+**Step A: The Exploit (CLI)**
+Using the compromised `proj2-attacker` credentials, I executed the following commands to create a new user and bypass intended restrictions:
 
-<details>
-<summary><b>[Click to view proof of execution]</b></summary>
-<br>
+![CLI Proof](screenshots/13_hacked_admin_user_created.png)
+*Figure 13: Terminal output showing the successful creation of 'hacked-admin' via AWS CLI.*
+
+**Step B: Verification (Console)**
+The screenshot below confirms that the rogue user was successfully injected into the IAM environment with full privileges:
+
+![Console Proof](screenshots/18_hacked_admin_user.png)
+*Figure 18: AWS Management Console view confirming the existence of the unauthorized 'hacked-admin' identity.*
 
 ![IAM User Creation](screenshots/01_iam_user_creation.png)
 *Figure 1: The rogue 'hacked-admin' user is successfully created.*
